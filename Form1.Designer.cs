@@ -88,6 +88,7 @@
             btnDiv.TabIndex = 3;
             btnDiv.Text = "%";
             btnDiv.UseVisualStyleBackColor = true;
+            btnDiv.Click += btnOperator_Click;
             // 
             // btn7
             // 
@@ -127,6 +128,7 @@
             btnMul.TabIndex = 7;
             btnMul.Text = "X";
             btnMul.UseVisualStyleBackColor = true;
+            btnMul.Click += btnOperator_Click;
             // 
             // btn4
             // 
@@ -166,6 +168,7 @@
             btnSub.TabIndex = 11;
             btnSub.Text = "-";
             btnSub.UseVisualStyleBackColor = true;
+            btnSub.Click += btnOperator_Click;
             // 
             // btnSign
             // 
@@ -231,6 +234,7 @@
             txtInput.Name = "txtInput";
             txtInput.Size = new Size(593, 67);
             txtInput.TabIndex = 18;
+            txtInput.Click += btnOperator_Click;
             // 
             // btn1
             // 
@@ -240,6 +244,7 @@
             btn1.TabIndex = 19;
             btn1.Text = "1";
             btn1.UseVisualStyleBackColor = true;
+            btn1.Click += btnNumeber_Click;
             // 
             // btn2
             // 
@@ -249,6 +254,7 @@
             btn2.TabIndex = 20;
             btn2.Text = "2";
             btn2.UseVisualStyleBackColor = true;
+            btn2.Click += btnNumeber_Click;
             // 
             // btn3
             // 
@@ -258,6 +264,7 @@
             btn3.TabIndex = 21;
             btn3.Text = "3";
             btn3.UseVisualStyleBackColor = true;
+            btn3.Click += btnNumeber_Click;
             // 
             // btnAdd
             // 
@@ -267,7 +274,7 @@
             btnAdd.TabIndex = 22;
             btnAdd.Text = "+";
             btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnAdd_Click;
+            btnAdd.Click += btnOperator_Click;
             // 
             // Form1
             // 
@@ -299,7 +306,7 @@
             Controls.Add(btnCe);
             Name = "Form1";
             Text = "Form1";
-            Click += btnNumeber_Click;
+            Click += btnOperator_Click;
             ResumeLayout(false);
             PerformLayout();
         }
