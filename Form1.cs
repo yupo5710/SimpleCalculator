@@ -83,23 +83,30 @@ namespace SimpleCalculator
         // --- [결과 확인 버튼 클릭 (=)] ---
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtFormular.Text)) return;
+            if (string.IsNullOrEmpty(txtFormular.Text) && string.IsNullOrEmpty(tempInput)) return;
 
             try
             {
-                // 전체 수식 가져오기
-                string finalExpression = txtFormular.Text;
+                // 1. 현재 입력 중인 내용까지 합치기
+                string finalExpression = txtFormular.Text + tempInput;
 
-                // 컴퓨터가 인식하는 연산자로 치환
+                // 2. 자동 곱셈 보정 로직 (정규식 대신 단순 치환 활용)
+                // 숫자(또는 닫는괄호)와 여는괄호 사이에 * 삽입
+                for (int i = 0; i < 10; i++)
+                {
+                    finalExpression = finalExpression.Replace($"{i}(", $"{i}*("); // 예: 5( -> 5*(
+                }
+                finalExpression = finalExpression.Replace(")(", ")*("); // 예: )( -> )*(
+
+                // 3. 컴퓨터용 연산자로 치환
                 string mathExpression = finalExpression.Replace("X", "*").Replace("÷", "/");
 
-                // DataTable.Compute를 이용한 복수 수식 일괄 계산
                 var table = new DataTable();
                 var computeResult = table.Compute(mathExpression, "");
 
                 result = Convert.ToDouble(computeResult);
 
-                // 무한대(Infinity) 또는 NaN(0/0) 방어 로직 (과제4 예외처리)
+                // 4. 무한대/NaN 체크
                 if (double.IsInfinity(result) || double.IsNaN(result))
                 {
                     MessageBox.Show("0으로 나눌 수 없습니다.", "계산 오류");
@@ -112,12 +119,10 @@ namespace SimpleCalculator
                 txtInput.Text = result.ToString();
 
                 tempInput = "";
-                fullFormula = "";
             }
             catch (Exception)
             {
                 MessageBox.Show("괄호 짝이 맞지 않거나 잘못된 수식입니다.", "계산 오류");
-                btnClear_Click(null, null);
             }
         }
 
