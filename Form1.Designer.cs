@@ -51,6 +51,8 @@
             btn2 = new Button();
             btn3 = new Button();
             btnAdd = new Button();
+            btnOpenParenthesis = new Button();
+            btnCloseParenthesis = new Button();
             SuspendLayout();
             // 
             // btnCe
@@ -285,7 +287,7 @@
             txtInput.Margin = new Padding(3, 2, 3, 2);
             txtInput.Multiline = true;
             txtInput.Name = "txtInput";
-            txtInput.Size = new Size(593, 103);
+            txtInput.Size = new Size(471, 103);
             txtInput.TabIndex = 18;
             txtInput.Click += btnOperator_Click;
             // 
@@ -341,11 +343,39 @@
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnOperator_Click;
             // 
+            // btnOpenParenthesis
+            // 
+            btnOpenParenthesis.BackColor = SystemColors.AppWorkspace;
+            btnOpenParenthesis.Font = new Font("굴림", 9F, FontStyle.Bold);
+            btnOpenParenthesis.Location = new Point(583, 258);
+            btnOpenParenthesis.Margin = new Padding(3, 2, 3, 2);
+            btnOpenParenthesis.Name = "btnOpenParenthesis";
+            btnOpenParenthesis.Size = new Size(74, 63);
+            btnOpenParenthesis.TabIndex = 23;
+            btnOpenParenthesis.Text = "(";
+            btnOpenParenthesis.UseVisualStyleBackColor = false;
+            btnOpenParenthesis.Click += btnOpenParenthesis_Click;
+            // 
+            // btnCloseParenthesis
+            // 
+            btnCloseParenthesis.BackColor = SystemColors.AppWorkspace;
+            btnCloseParenthesis.Font = new Font("굴림", 9F, FontStyle.Bold);
+            btnCloseParenthesis.Location = new Point(659, 258);
+            btnCloseParenthesis.Margin = new Padding(3, 2, 3, 2);
+            btnCloseParenthesis.Name = "btnCloseParenthesis";
+            btnCloseParenthesis.Size = new Size(74, 63);
+            btnCloseParenthesis.TabIndex = 24;
+            btnCloseParenthesis.Text = ")";
+            btnCloseParenthesis.UseVisualStyleBackColor = false;
+            btnCloseParenthesis.Click += btnCloseParenthesis_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(14F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 824);
+            Controls.Add(btnCloseParenthesis);
+            Controls.Add(btnOpenParenthesis);
             Controls.Add(btnAdd);
             Controls.Add(btn3);
             Controls.Add(btn2);
@@ -373,7 +403,7 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
-            Load += Form1_Load;
+           
             Click += btnOperator_Click;
             ResumeLayout(false);
             PerformLayout();
@@ -404,5 +434,7 @@
         private Button btn2;
         private Button btn3;
         private Button btnAdd;
+        private Button btnOpenParenthesis;
+        private Button btnCloseParenthesis;
     }
 }

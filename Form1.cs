@@ -1,35 +1,44 @@
+using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Windows.Forms;
+using System.Data;
+
 namespace SimpleCalculator
 {
-    using System.Drawing.Drawing2D; // 상단에 추가 필수
     public partial class Form1 : Form
     {
-        double result = 0;
-        string currentOperator = "";
-        string tempInput = "";
-        // 복수 연산을 위해 이전까지의 수식을 저장할 변수 추가
-        string fullFormula = "";
+        // [데이터 저장 변수]
+        double result = 0;            // 최종 계산 결과값 저장
+        string currentOperator = ""; // 클릭된 연산자 저장
+        string tempInput = "";       // 현재 입력 중인 숫자 임시 저장
+        string fullFormula = "";     // 전체 수식을 저장할 변수
 
         public Form1()
         {
             InitializeComponent();
+
+            // 텍스트박스 폰트 설정
             txtInput.Font = new Font("맑은 고딕", 24F, FontStyle.Bold);
             txtFormular.Font = new Font("맑은 고딕", 16F, FontStyle.Regular);
 
+            // 모든 버튼을 찾아 동그랗게 만들기 (과제4 UI 고도화)
             foreach (Control control in this.Controls)
             {
                 if (control is Button btn)
                 {
                     SetRoundButton(btn);
-                    // btn.BackColor = Color.LightGray;  // 제거
                 }
             }
         }
 
+        // --- [숫자 버튼 클릭 이벤트] ---
         private void btnNumeber_Click(object sender, EventArgs e)
         {
             if (sender is not Button btn) return;
 
-            // 결과가 나온 상태에서 숫자를 누르면 초기화 후 새로 시작
+            // 결과(=)가 출력된 상태에서 숫자를 누르면 초기화 후 새로 시작
             if (txtFormular.Text.Contains("="))
             {
                 btnClear_Click(null, null);
@@ -39,11 +48,12 @@ namespace SimpleCalculator
             txtFormular.Text += btn.Text;
         }
 
+        // --- [연산자 버튼 클릭 이벤트] ---
         private void btnOperator_Click(object sender, EventArgs e)
         {
             if (sender is not Button btn) return;
 
-            // 1. 이미 결과가 나온 상태에서 연산자를 누르면 그 결과값부터 다시 시작
+            // 1. 결과가 나온 상태에서 연산자를 누르면 결과값부터 다시 시작 (연속 계산)
             if (txtFormular.Text.Contains("="))
             {
                 fullFormula = result.ToString() + " " + btn.Text + " ";
@@ -54,42 +64,42 @@ namespace SimpleCalculator
                 return;
             }
 
-            // 2. 숫자 입력 후 연산자를 누를 때 (계산은 하지 않고 수식만 추가)
-            if (!string.IsNullOrEmpty(tempInput))
+            // 2. 숫자 입력 후 연산자를 누를 때 (수식에 추가)
+            if (!string.IsNullOrEmpty(tempInput) || txtFormular.Text.EndsWith(")"))
             {
-                // 현재까지의 입력을 전체 수식에 합침
-                fullFormula += tempInput + " " + btn.Text + " ";
-                txtFormular.Text = fullFormula;
-
-                currentOperator = btn.Text; // 마지막 연산자 기억
-                txtInput.Clear();
+                txtFormular.Text += " " + btn.Text + " ";
+                currentOperator = btn.Text;
                 tempInput = "";
             }
             // 3. 연산자만 교체하고 싶을 때
-            else if (!string.IsNullOrEmpty(fullFormula))
+            else if (txtFormular.Text.Length > 3 && !txtFormular.Text.EndsWith(" "))
             {
-                // 마지막 연산자 기호만 교체 (뒤의 공백 포함 3글자 제거 후 새 연산자 삽입)
-                fullFormula = fullFormula.Substring(0, fullFormula.Length - 3) + " " + btn.Text + " ";
-                txtFormular.Text = fullFormula;
+                // 마지막 연산자 기호 교체 로직
+                txtFormular.Text = txtFormular.Text.Substring(0, txtFormular.Text.Length - 3) + " " + btn.Text + " ";
                 currentOperator = btn.Text;
             }
         }
 
+        // --- [결과 확인 버튼 클릭 (=)] ---
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tempInput) || string.IsNullOrEmpty(fullFormula)) return;
+            if (string.IsNullOrEmpty(txtFormular.Text)) return;
 
             try
             {
-                string finalExpression = fullFormula + tempInput;
+                // 전체 수식 가져오기
+                string finalExpression = txtFormular.Text;
+
+                // 컴퓨터가 인식하는 연산자로 치환
                 string mathExpression = finalExpression.Replace("X", "*").Replace("÷", "/");
 
-                var table = new System.Data.DataTable();
+                // DataTable.Compute를 이용한 복수 수식 일괄 계산
+                var table = new DataTable();
                 var computeResult = table.Compute(mathExpression, "");
 
                 result = Convert.ToDouble(computeResult);
 
-                // 핵심: 무한대/NaN 방어
+                // 무한대(Infinity) 또는 NaN(0/0) 방어 로직 (과제4 예외처리)
                 if (double.IsInfinity(result) || double.IsNaN(result))
                 {
                     MessageBox.Show("0으로 나눌 수 없습니다.", "계산 오류");
@@ -97,6 +107,7 @@ namespace SimpleCalculator
                     return;
                 }
 
+                // 결과 출력
                 txtFormular.Text = finalExpression + " = " + result.ToString();
                 txtInput.Text = result.ToString();
 
@@ -105,11 +116,27 @@ namespace SimpleCalculator
             }
             catch (Exception)
             {
-                MessageBox.Show("계산할 수 없는 수식입니다.", "오류");
+                MessageBox.Show("괄호 짝이 맞지 않거나 잘못된 수식입니다.", "계산 오류");
                 btnClear_Click(null, null);
             }
         }
 
+        // --- [괄호 기능 추가] ---
+        private void btnOpenParenthesis_Click(object sender, EventArgs e)
+        {
+            if (txtFormular.Text.Contains("=")) btnClear_Click(null, null);
+            txtFormular.Text += "(";
+            tempInput = "";
+        }
+
+        private void btnCloseParenthesis_Click(object sender, EventArgs e)
+        {
+            if (txtFormular.Text.Contains("=")) return;
+            txtFormular.Text += ")";
+            tempInput = "";
+        }
+
+        // --- [초기화 및 지우기 기능] ---
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtInput.Clear();
@@ -120,13 +147,13 @@ namespace SimpleCalculator
             currentOperator = "";
         }
 
-        // --- 나머지 기능(Back, CE, Point)은 이전과 동일하게 유지 ---
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (tempInput.Length > 0)
+            if (txtFormular.Text.Length > 0 && !txtFormular.Text.Contains("="))
             {
-                tempInput = tempInput.Substring(0, tempInput.Length - 1);
                 txtFormular.Text = txtFormular.Text.Substring(0, txtFormular.Text.Length - 1);
+                if (tempInput.Length > 0)
+                    tempInput = tempInput.Substring(0, tempInput.Length - 1);
             }
         }
 
@@ -135,25 +162,30 @@ namespace SimpleCalculator
             if (tempInput.Length > 0)
             {
                 txtFormular.Text = txtFormular.Text.Substring(0, txtFormular.Text.Length - tempInput.Length);
-                tempInput = "0";
-                txtFormular.Text += tempInput;
+                tempInput = "";
             }
         }
 
         private void btnPoint_Click(object sender, EventArgs e)
         {
             if (txtFormular.Text.Contains("=")) btnClear_Click(null, null);
+
             if (!tempInput.Contains("."))
             {
-                if (string.IsNullOrEmpty(tempInput)) { tempInput = "0."; txtFormular.Text += "0."; }
-                else { tempInput += "."; txtFormular.Text += "."; }
+                if (string.IsNullOrEmpty(tempInput))
+                {
+                    tempInput = "0.";
+                    txtFormular.Text += "0.";
+                }
+                else
+                {
+                    tempInput += ".";
+                    txtFormular.Text += ".";
+                }
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        // --- [UI 고도화: 버튼 디자인] ---
         private void SetRoundButton(Button btn)
         {
             GraphicsPath path = new GraphicsPath();
