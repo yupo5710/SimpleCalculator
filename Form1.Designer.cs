@@ -45,7 +45,7 @@
             btnPoint = new Button();
             btnEqual = new Button();
             labelSimpleCalculator = new Label();
-            txtFomular = new TextBox();
+            txtFormular = new TextBox();
             txtInput = new TextBox();
             btn1 = new Button();
             btn2 = new Button();
@@ -204,6 +204,7 @@
             btnEqual.TabIndex = 15;
             btnEqual.Text = "=";
             btnEqual.UseVisualStyleBackColor = true;
+            btnEqual.Click += btnEqual_Click;
             // 
             // labelSimpleCalculator
             // 
@@ -214,14 +215,14 @@
             labelSimpleCalculator.TabIndex = 16;
             labelSimpleCalculator.Text = "Simple Calculator";
             // 
-            // txtFomular
+            // txtFormular
             // 
-            txtFomular.Location = new Point(87, 120);
-            txtFomular.Multiline = true;
-            txtFomular.Name = "txtFomular";
-            txtFomular.Size = new Size(593, 70);
-            txtFomular.TabIndex = 17;
-            txtFomular.Click += btnNumeber_Click;
+            txtFormular.Location = new Point(87, 120);
+            txtFormular.Multiline = true;
+            txtFormular.Name = "txtFormular";
+            txtFormular.Size = new Size(593, 70);
+            txtFormular.TabIndex = 17;
+            txtFormular.Click += btnNumeber_Click;
             // 
             // txtInput
             // 
@@ -266,6 +267,7 @@
             btnAdd.TabIndex = 22;
             btnAdd.Text = "+";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // Form1
             // 
@@ -277,7 +279,7 @@
             Controls.Add(btn2);
             Controls.Add(btn1);
             Controls.Add(txtInput);
-            Controls.Add(txtFomular);
+            Controls.Add(txtFormular);
             Controls.Add(labelSimpleCalculator);
             Controls.Add(btnEqual);
             Controls.Add(btnPoint);
@@ -321,7 +323,7 @@
         private Button btnPoint;
         private Button btnEqual;
         private Label labelSimpleCalculator;
-        private TextBox txtFomular;
+        private TextBox txtFormular;
         private TextBox txtInput;
         private Button btn1;
         private Button btn2;
