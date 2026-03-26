@@ -59,6 +59,7 @@
     사용한 코드:    
     `tempInput = "";`    
     `txtInput.Clear();`    
+
 ## 실행 화면 (과제3)
 - 과제3 코드의 실행 스크린샷
 
@@ -86,4 +87,37 @@
   - C 버튼 클릭 시 모든 변수와 텍스트박스를 초기화하여 새 계산 상태로 만든다.   
     사용한 코드:   
     `txtInput.Clear(); txtFormular.Clear();`   
-    `tempInput = ""; firstNumber = 0; currentOperator = "";`   
+    `tempInput = ""; firstNumber = 0; currentOperator = "";`  
+
+## 실행 화면 (과제 4)
+- 과제 4 코드의 실행 스크린샷
+
+![과제 4 실행화면 1](img/screenshot-11.png)
+![과제 4 실행화면 2](img/screenshot-12.png)
+![과제 4 실행화면 2](img/screenshot-13.png)
+
+- 과제 내용
+  - **복수 수식 일괄 계산**: `DataTable.Compute`를 활용하여 사칙연산 우선순위가 적용된 연속 계산 기능을 구현합니다.
+  - **커스텀 UI 디자인**: `GraphicsPath`를 이용하여 각진 버튼을 현대적인 원형(Round) 버튼으로 스타일링합니다.
+  - **예외 처리 강화**: `try-catch`문을 도입하여 0으로 나누기 등 산술 오류 시 프로그램의 안정성을 확보합니다.
+
+- 구현 내용과 기능 설명
+  - **문자열 수식 일괄 계산 및 연산 우선순위 적용** 연산자를 누를 때마다 계산하지 않고 수식을 문자열로 쌓은 뒤, `=` 클릭 시 사칙연산 우선순위에 따라 한 번에 연산한다.  
+    사용한 코드:  
+    `string mathExpression = finalExpression.Replace("X", "*").Replace("÷", "/");`  
+    `var computeResult = table.Compute(mathExpression, "");`
+
+  - **GraphicsPath를 이용한 원형 버튼 디자인 구현** 버튼의 영역(`Region`)을 타원형으로 잘라내고 `FlatStyle.Flat` 설정을 통해 선명한 색상의 라운드 버튼을 구현한다.  
+    사용한 코드:  
+    `path.AddEllipse(0, 0, btn.Width, btn.Height);`  
+    `btn.Region = new Region(path);`  
+    `btn.FlatStyle = FlatStyle.Flat;`
+
+  - **Try-Catch를 통한 안정적인 예외 처리** 0으로 나누기(`DivideByZeroException`) 등 계산 중 발생할 수 있는 시스템 오류를 감지하여 사용자 알림을 띄우고 상태를 초기화한다.  
+    사용한 코드:  
+    `catch (DivideByZeroException) { MessageBox.Show("0으로 나눌 수 없습니다.", "계산 오류"); }`    
+
+  - **소수점 중복 방지 및 자동 보정 로직** 한 숫자 내 중복 입력을 차단하고, 숫자 없이 점만 입력될 경우 UX 편의를 위해 자동으로 `0.`으로 변환한다.  
+    사용한 코드:  
+    `if (!tempInput.Contains(".")) { if (string.IsNullOrEmpty(tempInput)) tempInput = "0."; }`    
+

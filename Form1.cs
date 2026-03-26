@@ -1,5 +1,6 @@
 namespace SimpleCalculator
 {
+    using System.Drawing.Drawing2D; // 상단에 추가 필수
     public partial class Form1 : Form
     {
         double result = 0;
@@ -13,6 +14,15 @@ namespace SimpleCalculator
             InitializeComponent();
             txtInput.Font = new Font("맑은 고딕", 24F, FontStyle.Bold);
             txtFormular.Font = new Font("맑은 고딕", 16F, FontStyle.Regular);
+
+            foreach (Control control in this.Controls)
+            {
+                if (control is Button btn)
+                {
+                    SetRoundButton(btn);
+                    // btn.BackColor = Color.LightGray;  // 제거
+                }
+            }
         }
 
         private void btnNumeber_Click(object sender, EventArgs e)
@@ -69,11 +79,9 @@ namespace SimpleCalculator
         {
             if (string.IsNullOrEmpty(tempInput) || string.IsNullOrEmpty(fullFormula)) return;
 
-            // DataTable의 Compute 메서드를 활용하면 복잡한 문자열 수식을 한 번에 계산할 수 있습니다.
             try
             {
                 string finalExpression = fullFormula + tempInput;
-                // 'X'나 '÷' 기호를 컴퓨터가 인식하는 '*'와 '/'로 치환
                 string mathExpression = finalExpression.Replace("X", "*").Replace("÷", "/");
 
                 var table = new System.Data.DataTable();
@@ -81,18 +89,19 @@ namespace SimpleCalculator
 
                 result = Convert.ToDouble(computeResult);
 
-                // 결과 출력
+                // 핵심: 무한대/NaN 방어
+                if (double.IsInfinity(result) || double.IsNaN(result))
+                {
+                    MessageBox.Show("0으로 나눌 수 없습니다.", "계산 오류");
+                    btnClear_Click(null, null);
+                    return;
+                }
+
                 txtFormular.Text = finalExpression + " = " + result.ToString();
                 txtInput.Text = result.ToString();
 
-                // 상태 초기화
                 tempInput = "";
                 fullFormula = "";
-            }
-            catch (DivideByZeroException)
-            {
-                MessageBox.Show("0으로 나눌 수 없습니다.", "계산 오류");
-                btnClear_Click(null, null);
             }
             catch (Exception)
             {
@@ -139,6 +148,21 @@ namespace SimpleCalculator
                 if (string.IsNullOrEmpty(tempInput)) { tempInput = "0."; txtFormular.Text += "0."; }
                 else { tempInput += "."; txtFormular.Text += "."; }
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void SetRoundButton(Button btn)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddEllipse(0, 0, btn.Width, btn.Height);
+            btn.Region = new Region(path);
+
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.UseVisualStyleBackColor = false;
         }
     }
 }
