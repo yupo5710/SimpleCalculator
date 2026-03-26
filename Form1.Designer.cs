@@ -200,6 +200,7 @@
             btnPoint.TabIndex = 14;
             btnPoint.Text = ".";
             btnPoint.UseVisualStyleBackColor = true;
+            btnPoint.Click += btnPoint_Click;
             // 
             // btnEqual
             // 
