@@ -92,9 +92,9 @@
 ## 실행 화면 (과제 4)
 - 과제 4 코드의 실행 스크린샷
 
-![과제 4 실행화면 1](img/screenshot-11.png)
-![과제 4 실행화면 2](img/screenshot-12.png)
-![과제 4 실행화면 2](img/screenshot-13.png)
+![과제 4 실행화면](img/screenshot-11.png)
+![과제 4 실행화면](img/screenshot-12.png)
+![과제 4 실행화면](img/screenshot-13.png)
 
 - 과제 내용
   - **복수 수식 일괄 계산**: `DataTable.Compute`를 활용하여 사칙연산 우선순위가 적용된 연속 계산 기능을 구현합니다.
