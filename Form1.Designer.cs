@@ -61,6 +61,7 @@
             btnCe.TabIndex = 0;
             btnCe.Text = "CE";
             btnCe.UseVisualStyleBackColor = true;
+            btnCe.Click += btnCe_Click;
             // 
             // btnC
             // 
@@ -70,6 +71,7 @@
             btnC.TabIndex = 1;
             btnC.Text = "C";
             btnC.UseVisualStyleBackColor = true;
+            btnC.Click += btnClear_Click;
             // 
             // btnDel
             // 
@@ -79,6 +81,7 @@
             btnDel.TabIndex = 2;
             btnDel.Text = "del";
             btnDel.UseVisualStyleBackColor = true;
+            btnDel.Click += btnBack_Click;
             // 
             // btnDiv
             // 
@@ -197,7 +200,6 @@
             btnPoint.TabIndex = 14;
             btnPoint.Text = ".";
             btnPoint.UseVisualStyleBackColor = true;
-            btnPoint.Click += btnPoint_Click;
             // 
             // btnEqual
             // 
