@@ -98,6 +98,8 @@
 ![과제 4 실행화면](img/screenshot-12.png)
 ![과제 4 실행화면](img/screenshot-13.png)
 ![과제 4 실행화면](img/screenshot-14.png)
+![과제 4 실행화면](img/screenshot-15.png)
+![과제 4 실행화면](img/screenshot-16.png)
 
 - 과제 내용
   - **(추가)복수 수식 일괄 계산**: `DataTable.Compute`를 활용하여 사칙연산 우선순위가 적용된 연속 계산 기능을 구현합니다.
